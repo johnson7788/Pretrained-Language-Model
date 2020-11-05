@@ -252,12 +252,12 @@ Parameters for bert network:
 ```
 ## [Training Process](#contents)
 ### Training
-#### running on Ascend
-Before running the command below, please check `load_teacher_ckpt_path`, `data_dir` and `schma_dir` has been set. Please set the path to be the absolute full path, e.g:"/username/checkpoint_100_300.ckpt".
+#### Ascend上运行
+运行命令之前，请检查`load_teacher_ckpt_path`, `data_dir` and `schma_dir` 是否已经设置. 请将路径设置为绝对完整路径, e.g:"/username/checkpoint_100_300.ckpt".
 ```
 bash scripts/run_standalone_gd.sh
 ```
-The command above will run in the background, you can view the results the file log.txt. After training, you will get some checkpoint files under the script folder by default. The loss value will be achieved as follows:
+上面的命令将在后台运行，您可以在文件log.txt中查看结果。训练后，默认情况下，您将在脚本文件夹下获得一些checkpoint文件。loss value如下：
 ```
 # grep "epoch" log.txt
 epoch: 1, step: 100, outpus are (Tensor(shape=[1], dtype=Float32, 28.2093), Tensor(shape=[], dtype=Bool, False), Tensor(shape=[], dtype=Float32, 65536))
@@ -265,14 +265,14 @@ epoch: 2, step: 200, outpus are (Tensor(shape=[1], dtype=Float32, 30.1724), Tens
 ...
 ```
 
-> **Attention** This will bind the processor cores according to the `device_num` and total processor numbers. If you don't expect to run pretraining with binding processor cores, remove the operations about `taskset` in `scripts/run_distributed_gd_ascend.sh`
+> **注意** 这将根据“device_num”和处理器总数绑定处理器核心。如果您不希望对绑定处理器核心进行预训练，请删除有关 `taskset` in `scripts/run_distributed_gd_ascend.sh`
 
-#### running on GPU
-Before running the command below, please check `load_teacher_ckpt_path`, `data_dir` `schma_dir` and `device_target=GPU` has been set. Please set the path to be the absolute full path, e.g:"/username/checkpoint_100_300.ckpt".
+#### GPU上运行
+运行命令之前，请检查 `load_teacher_ckpt_path`, `data_dir` `schma_dir` and `device_target=GPU` 是否已经设置. 请将路径设置为绝对完整路径, e.g:"/username/checkpoint_100_300.ckpt".
 ```
 bash scripts/run_standalone_gd.sh
 ```
-The command above will run in the background, you can view the results the file log.txt. After training, you will get some checkpoint files under the script folder by default. The loss value will be achieved as follows:
+上面的命令将在后台运行，您可以在文件log.txt中查看结果。训练后，默认情况下，您将在脚本文件夹下获得一些checkpoint文件。loss value如下：
 ```
 # grep "epoch" log.txt
 epoch: 1, step: 100, outpus are 28.2093
@@ -281,11 +281,11 @@ epoch: 1, step: 100, outpus are 28.2093
 
 ### Distributed Training
 #### running on Ascend
-Before running the command below, please check `load_teacher_ckpt_path`, `data_dir` and `schma_dir` has been set. Please set the path to be the absolute full path, e.g:"/username/checkpoint_100_300.ckpt".
+运行命令之前，请检查 `load_teacher_ckpt_path`, `data_dir` and `schma_dir` 是否已经设置. 请将路径设置为绝对完整路径, e.g:"/username/checkpoint_100_300.ckpt".
 ```
 bash scripts/run_distributed_gd_ascend.sh 8 1 /path/hccl.json
 ```
-The command above will run in the background, you can view the results the file log.txt. After training, you will get some checkpoint files under the LOG* folder by default. The loss value will be achieved as follows:
+上面的命令将在后台运行，您可以在文件log.txt中查看结果。训练后，默认情况下，您将在脚本文件夹下获得一些checkpoint文件。loss value如下：
 ```
 # grep "epoch" LOG*/log.txt
 epoch: 1, step: 100, outpus are (Tensor(shape=[1], dtype=Float32, 28.1478), Tensor(shape=[], dtype=Bool, False), Tensor(shape=[], dtype=Float32, 65536))
@@ -295,11 +295,11 @@ epoch: 1, step: 100, outpus are (Tensor(shape=[1], dtype=Float32, 30.5901), Tens
 ```
 
 #### running on GPU
-Please input the path to be the absolute full path, e.g:"/username/checkpoint_100_300.ckpt".
+请将路径设置为绝对完整路径,, e.g:"/username/checkpoint_100_300.ckpt".
 ```
 bash scripts/run_distributed_gd_gpu.sh 8 1 /path/data/ /path/schema.json /path/teacher.ckpt
 ```
-The command above will run in the background, you can view the results the file log.txt. After training, you will get some checkpoint files under the LOG* folder by default. The loss value will be achieved as follows:
+上面的命令将在后台运行，您可以在文件log.txt中查看结果。训练后，默认情况下，您将在脚本文件夹下获得一些checkpoint文件。loss value如下：
 ```
 # grep "epoch" LOG*/log.txt
 epoch: 1, step: 1, outpus are 63.4098
@@ -308,12 +308,12 @@ epoch: 1, step: 1, outpus are 63.4098
 
 ## [Evaluation Process](#contents)
 ### Evaluation
-If you want to after running and continue to eval, please set `do_train=true` and `do_eval=true`, If you want to run eval alone, please set `do_train=false` and `do_eval=true`. If running on GPU, please set `device_target=GPU`.
+如果要在运行后继续评估，请设置 `do_train=true` and `do_eval=true`, 如果你想单独评估或训练, 请设置 `do_train=false` and `do_eval=true`. If running on GPU, please set `device_target=GPU`.
 #### evaluation on SST-2 dataset  
 ```
 bash scripts/run_standalone_td.sh
 ```
-The command above will run in the background, you can view the results the file log.txt. The accuracy of the test dataset will be as follows:   
+上面的命令将在后台运行，您可以在文件log.txt中查看结果。测试数据集的准确性如下：
 ```bash
 # grep "The best acc" log.txt
 The best acc is 0.872685
@@ -324,11 +324,11 @@ The best acc is 0.902777
 ...
 ```
 #### evaluation on MNLI dataset
-Before running the command below, please check the load pretrain checkpoint path has been set. Please set the checkpoint path to be the absolute full path, e.g:"/username/pretrain/checkpoint_100_300.ckpt".
+在运行以下命令之前，请检查是否已设置了load pretrain checkpoint路径。请将checkpoint路径设置为绝对完整路径， e.g:"/username/pretrain/checkpoint_100_300.ckpt".
 ```
 bash scripts/run_standalone_td.sh
 ```
-The command above will run in the background, you can view the results the file log.txt. The accuracy of the test dataset will be as follows:   
+上面的命令将在后台运行，您可以在文件log.txt中查看结果。测试集的准确率如下：
 ```
 # grep "The best acc" log.txt
 The best acc is 0.803206
@@ -339,11 +339,11 @@ The best acc is 0.813929
 ...
 ```
 #### evaluation on QNLI dataset
-Before running the command below, please check the load pretrain checkpoint path has been set. Please set the checkpoint path to be the absolute full path, e.g:"/username/pretrain/checkpoint_100_300.ckpt".
+在运行以下命令之前，请检查是否已设置了load pretrain checkpoint路径。请将checkpoint路径设置为绝对完整路径， e.g:"/username/pretrain/checkpoint_100_300.ckpt".
 ```
 bash scripts/run_standalone_td.sh
 ```
-The command above will run in the background, you can view the results the file log.txt. The accuracy of the test dataset will be as follows:   
+上面的命令将在后台运行，您可以在文件log.txt中查看结果。测试集的准确率如下：
 ```
 # grep "The best acc" log.txt
 The best acc is 0.870772
@@ -391,11 +391,11 @@ The best acc is 0.891176
 
 # [Description of Random Situation](#contents)
 
-In run_standaloned_td.sh, we set do_shuffle to shuffle the dataset. 
+在run_standaloned_td.sh中，我们将do_shuffle设置为shuffle数据集。
 
-In gd_config.py and td_config.py, we set the hidden_dropout_prob and attention_pros_dropout_prob to dropout some network node.
+在gd_config.py和td_config.py中，我们设置了hidden_​​dropout_prob和tention_pros_dropout_prob来dropout某些网络节点。
 
-In run_general_distill.py, we set the random seed to make sure distribute training has the same init weight.
+在run_general_distill.py中，我们设置随机种子以确保分布式训练具有相同的初始权重。
 
 # [ModelZoo Homepage](#contents)
  

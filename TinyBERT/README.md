@@ -1,13 +1,13 @@
 TinyBERT
 ======== 
-TinyBERT is 7.5x smaller and 9.4x faster on inference than BERT-base and achieves competitive performances in the tasks of natural language understanding. It performs a novel transformer distillation at both the pre-training and task-specific learning stages. The overview of TinyBERT learning is illustrated as follows: 
+TinyBERT比BERT-base 小7.5倍，而推理速度则快9.4倍，并且在自然语言理解任务中取得了出色的性能。它在预训练和特定任务的学习阶段都进行了新颖的transformer蒸馏。 TinyBERT学习的概述如下所示：
 <br />
 <br />
 <img src="tinybert_overview.png" width="800" height="210"/>
 <br />
 <br />
 
-For more details about the techniques of TinyBERT, refer to our paper:
+有关TinyBERT技术的更多详细信息，请参阅我们的论文：
 
 [TinyBERT: Distilling BERT for Natural Language Understanding](https://arxiv.org/abs/1909.10351)
 
@@ -18,23 +18,22 @@ First version: 2019/11/26
 
 Installation
 ============
-Run command below to install the environment(**using python3**)
+运行以下命令以安装环境 (**using python3**)
 ```bash
 pip install -r requirements.txt
 ```
 
-General Distillation
+通用形式蒸馏 
 ====================
-In general distillation, we use the original BERT-base without fine-tuning as the teacher and a large-scale text corpus as the learning data. By performing the Transformer distillation on the text from general domain, we obtain a general TinyBERT which provides a good initialization for the task-specific distillation. 
+在通用形式蒸馏中，我们使用原始的BERT库而不进行微调作为teacher，并使用大型文本语料库作为学习数据。通过对来自一般领域的文本进行Transformer蒸馏，我们获得了一个常规的TinyBERT，它为特定于任务的蒸馏提供了良好的初始化。
 
-General distillation has two steps: (1) generate the corpus of json format; (2) run the transformer distillation;
+通用形式蒸馏有两个步骤：(1)生成json格式的语料库； (2)运行transformer蒸馏；
 
-Step 1: use `pregenerate_training_data.py` to produce the corpus of json format  
-
+步骤1：使用`pregenerate_training_data.py`生成json格式的语料库
 
 ```
  
-# ${BERT_BASE_DIR}$ includes the BERT-base teacher model.
+# ${BERT_BASE_DIR}$ 包含 BERT-base teacher 模型.
  
 python pregenerate_training_data.py --train_corpus ${CORPUS_RAW} \ 
                   --bert_model ${BERT_BASE_DIR}$ \
@@ -44,9 +43,9 @@ python pregenerate_training_data.py --train_corpus ${CORPUS_RAW} \
                              
 ```
 
-Step 2: use `general_distill.py` to run the general distillation
+Step 2: 使用 `general_distill.py` 运行通用形式蒸馏
 ```
- # ${STUDENT_CONFIG_DIR}$ includes the config file of student_model.
+ # ${STUDENT_CONFIG_DIR}$ 包含student_model的配置文件.
  
 python general_distill.py --pregenerated_data ${CORPUS_JSON}$ \ 
                           --teacher_model ${BERT_BASE}$ \
@@ -57,26 +56,28 @@ python general_distill.py --pregenerated_data ${CORPUS_JSON}$ \
 ```
 
 
-We also provide the models of general TinyBERT here and users can skip the general distillation.
+我们在此处提供通用TinyBERT的模型，用户可以跳过通用形式蒸馏。
 
-=================1st version to reproduce our results in the paper ===========================
+=================第一个版本可在论文中重现我们的结果 ===========================
 
 [General_TinyBERT(4layer-312dim)](https://drive.google.com/uc?export=download&id=1dDigD7QBv1BmE6pWU71pFYPgovvEqOOj) 
 
 [General_TinyBERT(6layer-768dim)](https://drive.google.com/uc?export=download&id=1wXWR00EHK-Eb7pbyw0VP234i2JTnjJ-x)
 
-=================2nd version (2019/11/18) trained with more (book+wiki) and no `[MASK]` corpus =======
+=================第二版(2019/11/18)受过更多(book+wiki)的训练，没有`[MASK]`语料 =======
 
 [General_TinyBERT_v2(4layer-312dim)](https://drive.google.com/open?id=1PhI73thKoLU2iliasJmlQXBav3v33-8z)
 
 [General_TinyBERT_v2(6layer-768dim)](https://drive.google.com/open?id=1r2bmEsQe4jUBrzJknnNaBJQDgiRKmQjF)
 
 
-Data Augmentation
+数据增强
 =================
-Data augmentation aims to expand the task-specific training set. Learning more task-related examples, the generalization capabilities of student model can be further improved. We combine a pre-trained language model BERT and GloVe embeddings to do word-level replacement for data augmentation.
+数据增强旨在扩展特定任务的训练集。通过学习更多与任务相关的样本，可以进一步提高student模型的泛化能力。
+我们结合了预训练的语言模型BERT和GloVe嵌入来进行单词级替换以增强数据。
 
-Use `data_augmentation.py` to run data augmentation and the augmented dataset `train_aug.tsv` is automatically saved into the corresponding ${GLUE_DIR/TASK_NAME}$
+使用 `data_augmentation.py`  运行数据增强和扩充数据集， 
+`train_aug.tsv` 自动保存到 ${GLUE_DIR/TASK_NAME}$
 ```
 
 python data_augmentation.py --pretrained_bert_model ${BERT_BASE_DIR}$ \
@@ -85,18 +86,19 @@ python data_augmentation.py --pretrained_bert_model ${BERT_BASE_DIR}$ \
                             --task_name ${TASK_NAME}$
 
 ```
-Before running data augmentation of GLUE tasks you should download the [GLUE data](https://gluebenchmark.com/tasks) by running [this script](https://gist.github.com/W4ngatang/60c2bdb54d156a41194446737ce03e2e) and unpack it to some directory GLUE_DIR. And TASK_NAME can be one of CoLA, SST-2, MRPC, STS-B, QQP, MNLI, QNLI, RTE.
+在运行GLUE任务的数据增强之前，您应该下载  [GLUE data](https://gluebenchmark.com/tasks) 
+通过运行 [this script](https://gist.github.com/W4ngatang/60c2bdb54d156a41194446737ce03e2e) 并将其解压缩到某个目录GLUE_DIR。
+并且TASK_NAME可以是以下之一 CoLA, SST-2, MRPC, STS-B, QQP, MNLI, QNLI, RTE.
 
-Task-specific Distillation
+特定任务蒸馏
 ==========================
-In the task-specific distillation, we re-perform the proposed Transformer distillation to further improve TinyBERT by focusing on learning the task-specific knowledge. 
+在特定任务的蒸馏中，我们通过专注于学习特定任务的知识来重新执行提议的transformer蒸馏，以进一步改善TinyBERT。
+特定任务的蒸馏包括两个步骤：(1)中间层蒸馏； (2)预测层蒸馏。
 
-Task-specific distillation includes two steps: (1) intermediate layer distillation; (2) prediction layer distillation.
-
-Step 1: use `task_distill.py` to run the intermediate layer distillation.
+Step 1: 使用task_distill.py运行中间层蒸馏。
 ```
 
-# ${FT_BERT_BASE_DIR}$ contains the fine-tuned BERT-base model.
+# ${FT_BERT_BASE_DIR}$ 包含 fine-tuned BERT-base model.
 
 python task_distill.py --teacher_model ${FT_BERT_BASE_DIR}$ \
                        --student_model ${GENERAL_TINYBERT_DIR}$ \
@@ -112,7 +114,7 @@ python task_distill.py --teacher_model ${FT_BERT_BASE_DIR}$ \
 ```
 
 
-Step 2: use `task_distill.py` to run the prediction layer distillation.
+Step 2: 使用task_distill.py运行预测层蒸馏。
 ```
 
 python task_distill.py --pred_distill  \
@@ -131,20 +133,20 @@ python task_distill.py --pred_distill  \
                        
 ```
 
-
-We here also provide the distilled TinyBERT(both 4layer-312dim and 6layer-768dim) of all GLUE tasks for evaluation. Every task has its own folder where the corresponding model has been saved.
+我们在这里还提供了所有GLUE任务的蒸馏的TinyBERT(4layer-312dim和6layer-768dim)以供评估。
+每个任务都有其自己的文件夹，其中已保存了相应的模型。
 
 [TinyBERT(4layer-312dim)](https://drive.google.com/uc?export=download&id=1_sCARNCgOZZFiWTSgNbE7viW_G5vIXYg) 
 
 [TinyBERT(6layer-768dim)](https://drive.google.com/uc?export=download&id=1Vf0ZnMhtZFUE0XoD3hTXc6QtHwKr_PwS)
 
 
-Evaluation
+评估
 ==========================
-The `task_distill.py` also provide the evalution by running the following command:
+运行`task_distill.py`以下命令来评估：
 
 ```
-${TINYBERT_DIR}$ includes the config file, student model and vocab file.
+${TINYBERT_DIR}$ 包括配置文件，student模型和vocab文件。
 
 python task_distill.py --do_eval \
                        --student_model ${TINYBERT_DIR}$ \
@@ -159,6 +161,6 @@ python task_distill.py --do_eval \
 
 To Dos
 =========================
-* Evaluate TinyBERT on Chinese tasks.
-* Tiny*: use NEZHA or ALBERT as the teacher in TinyBERT learning.
-* Release better general TinyBERTs.
+* 对TinyBERT的中文任务进行评估。
+* Tiny *：使用NEZHA或ALBERT作为TinyBERT学习的teacher。
+* 发行更好的通用的TinyBERT。

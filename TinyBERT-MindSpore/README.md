@@ -1,5 +1,6 @@
 # TinyBERT for MindSpore
-This repository provides an implementation of TinyBERT model on [MindSpore](https://www.mindspore.cn/en), which is copied from the MindSpore [Model Zoo](https://gitee.com/mindspore/mindspore/tree/master/model_zoo/official/nlp/tinybert).
+该repository在以下位置提供了TinyBERT模型的实现 [MindSpore](https://www.mindspore.cn/en), 
+是从MindSpore拷贝过来的 [Model Zoo](https://gitee.com/mindspore/mindspore/tree/master/model_zoo/official/nlp/tinybert).
 
 # Contents
 - [TinyBERT for MindSpore](#tinybert-for-mindspore)
@@ -37,62 +38,65 @@ This repository provides an implementation of TinyBERT model on [MindSpore](http
 - [ModelZoo Homepage](#modelzoo-homepage)
 
 # [TinyBERT Description](#contents)
-[TinyBERT](https://github.com/huawei-noah/Pretrained-Language-Model/tree/master/TinyBERT) is 7.5x smalller and 9.4x faster on inference than [BERT-base](https://github.com/google-research/bert) (the base version of BERT model) and achieves competitive performances in the tasks of natural language understanding. It performs a novel transformer distillation at both the pre-training and task-specific learning stages.
+[TinyBERT](https://github.com/huawei-noah/Pretrained-Language-Model/tree/master/TinyBERT) 参数是7.5x倍小， 9.4x 倍推理速度 [BERT-base](https://github.com/google-research/bert) (the base version of BERT model) 并在自然语言理解任务中取得竞争性表现。它在预训练和特定任务的学习阶段进行新颖的transformer蒸馏.
 
 [Paper](https://arxiv.org/abs/1909.10351):  Xiaoqi Jiao, Yichun Yin, Lifeng Shang, Xin Jiang, Xiao Chen, Linlin Li, Fang Wang, Qun Liu. [TinyBERT: Distilling BERT for Natural Language Understanding](https://arxiv.org/abs/1909.10351). arXiv preprint arXiv:1909.10351. 
 
 # [Model Architecture](#contents)
-The backbone structure of TinyBERT is transformer, the transformer contains four encoder modules, one encoder contains one selfattention module and one selfattention module contains one attention module.  
+TinyBERT的骨干结构是transformer，transformer包含四个编码器模块，
+一个encoder包含一个self-attention模块，
+一个self-attention模块包含一个attention模块。
 
 # [Dataset](#contents)
-- Download the zhwiki or enwiki dataset for general distillation. Extract and clean text in the dataset with [WikiExtractor](https://github.com/attardi/wikiextractor). Convert the dataset to TFRecord format, please refer to create_pretraining_data.py which in [BERT](https://github.com/google-research/bert) repository.
-- Download glue dataset for task distillation. Convert dataset files from json format to tfrecord format, please refer to run_classifier.py which in [BERT](https://github.com/google-research/bert) repository.
+- 下载zhwiki或enwiki数据集以进行通用形式蒸馏。使用WikiExtractor提取和清除数据集中的文本 [WikiExtractor](https://github.com/attardi/wikiextractor). 
+将数据集转换为TFRecord格式，请参阅create_pretraining_data.py，其中 [BERT](https://github.com/google-research/bert) repository.
+- 下载glue数据集以进行任务蒸馏。将数据集文件从json格式转换为tfrecord格式，请参阅run_classifier.py [BERT](https://github.com/google-research/bert) repository.
 
 # [Environment Requirements](#contents)
 - Hardware（Ascend/GPU）
-  - Prepare hardware environment with Ascend or GPU processor. If you want to try Ascend, please send the [application form](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/file/other/Ascend%20Model%20Zoo%E4%BD%93%E9%AA%8C%E8%B5%84%E6%BA%90%E7%94%B3%E8%AF%B7%E8%A1%A8.docx) to ascend@huawei.com. Once approved, you can get the resources. 
+  - 使用Ascend或GPU处理器准备硬件环境。如果您想尝试登高，请发送 [application form](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/file/other/Ascend%20Model%20Zoo%E4%BD%93%E9%AA%8C%E8%B5%84%E6%BA%90%E7%94%B3%E8%AF%B7%E8%A1%A8.docx) 到ascend@huawei.com。一旦获得批准，您就可以获得资源. 
 - Framework
   - [MindSpore](https://gitee.com/mindspore/mindspore)
-- For more information, please check the resources below：
+- 有关更多信息，请检查以下资源：
   - [MindSpore Tutorials](https://www.mindspore.cn/tutorial/training/en/master/index.html)
   - [MindSpore Python API](https://www.mindspore.cn/doc/api_python/en/master/index.html)
 
 # [Quick Start](#contents)
-After installing MindSpore via the official website, you can start general distill, task distill and evaluation as follows:
+通过官方网站安装MindSpore后，您可以按照以下步骤开始通用蒸馏，任务蒸馏和评估：
 ```bash
-# run standalone general distill example
+# 运行独立的通用形式蒸馏样本
 bash scripts/run_standalone_gd.sh 
 
-Before running the shell script, please set the `load_teacher_ckpt_path`, `data_dir`, `schema_dir` and `dataset_type` in the run_standalone_gd.sh file first. If running on GPU, please set the `device_target=GPU`.
+在运行shell脚本之前，请设置 `load_teacher_ckpt_path`, `data_dir`, `schema_dir` and `dataset_type` 在运行run_standalone_gd.sh之前，如果在GPU上运行，请设置 `device_target=GPU`.
 
-# For Ascend device, run distributed general distill example
+# 对于Ascend设备，请运行分布式通用形式蒸馏样本
 bash scripts/run_distributed_gd_ascend.sh 8 1 /path/hccl.json
 
-Before running the shell script, please set the `load_teacher_ckpt_path`, `data_dir`, `schema_dir` and `dataset_type` in the run_distributed_gd_ascend.sh file first.
+在运行shell脚本之前，请设置 `load_teacher_ckpt_path`, `data_dir`, `schema_dir` and `dataset_type` 在运行  run_distributed_gd_ascend.sh之前.
 
-# For GPU device, run distributed general distill example
+# 对于GPU设备，运行分布式通用蒸馏样本
 bash scripts/run_distributed_gd_gpu.sh 8 1 /path/data/ /path/schema.json /path/teacher.ckpt
 
-# run task distill and evaluation example
+# 运行 task 蒸馏和样本评估
 bash scripts/run_standalone_td.sh 
 
 Before running the shell script, please set the `task_name`, `load_teacher_ckpt_path`, `load_gd_ckpt_path`, `train_data_dir`, `eval_data_dir`, `schema_dir` and `dataset_type` in the run_standalone_td.sh file first.
 If running on GPU, please set the `device_target=GPU`.
 ```
 
-For distributed training on Ascend, a hccl configuration file with JSON format needs to be created in advance.
-Please follow the instructions in the link below:
+为了在Ascend上进行分布式训练，需要预先创建JSON格式的hccl配置文件。
+请按照以下链接中的说明进行操作：
 https:gitee.com/mindspore/mindspore/tree/master/model_zoo/utils/hccl_tools.
 
-For dataset, if you want to set the format and parameters, a schema configuration file with JSON format needs to be created, please refer to [tfrecord](https://www.mindspore.cn/doc/programming_guide/zh-CN/master/dataset_loading.html#tfrecord) format. 
+对于数据集，如果要设置格式和参数，则需要创建JSON格式的架构配置文件，请参阅 [tfrecord](https://www.mindspore.cn/doc/programming_guide/zh-CN/master/dataset_loading.html#tfrecord) format. 
 ```
-For general task, schema file contains ["input_ids", "input_mask", "segment_ids"].
+对于通用形式的任务，架构文件包含 ["input_ids", "input_mask", "segment_ids"].
 
-For task distill and eval phase, schema file contains ["input_ids", "input_mask", "segment_ids", "label_ids"]. 
+对于任务蒸馏和评估阶段，schema架构文件包含 ["input_ids", "input_mask", "segment_ids", "label_ids"]. 
 
-`numRows` is the only option which could be set by user, the others value must be set according to the dataset.
+`numRows` 是用户可以设置的唯一选项，其他值必须根据数据集设置。
 
-For example, the dataset is cn-wiki-128, the schema file for general distill phase as following:
+例如，数据集是cn-wiki-128，这是常规提取阶段的模式文件，如下所示：
 {
 	"datasetType": "TF",
 	"numRows": 7680,
@@ -131,14 +135,14 @@ For example, the dataset is cn-wiki-128, the schema file for general distill pha
   ├─src
     ├─__init__.py
     ├─assessment_method.py               # assessment method for evaluation
-    ├─dataset.py                         # data processing
-    ├─gd_config.py                       # parameter configuration for general distill phase
-    ├─td_config.py                       # parameter configuration for task distill phase
-    ├─tinybert_for_gd_td.py              # backbone code of network
-    ├─tinybert_model.py                  # backbone code of network
+    ├─dataset.py                         # 数据处理
+    ├─gd_config.py                       # 通用蒸馏阶段的参数配置
+    ├─td_config.py                       # 任务蒸馏阶段的参数配置
+    ├─tinybert_for_gd_td.py              # 网络骨干网代码
+    ├─tinybert_model.py                  # 网络骨干网代码
     ├─utils.py                           # util function
   ├─__init__.py
-  ├─run_general_distill.py               # train net for general distillation 
+  ├─run_general_distill.py               # 通用蒸馏训练
   ├─run_task_distill.py                  # train and eval net for task distillation 
 ```
 
@@ -208,7 +212,7 @@ options:
 ```
 
 ## Options and Parameters
-`gd_config.py` and `td_config.py` contain parameters of BERT model and options for optimizer and lossscale.
+`gd_config.py` and `td_config.py` 包含BERT模型的参数以及优化程序和损失标度的选项。
 ### Options:
 ```
 batch_size                          batch size of input dataset: N, default is 16
